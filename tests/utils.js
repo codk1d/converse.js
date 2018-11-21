@@ -61,7 +61,9 @@
         return this;
     };
 
-    utils.openControlBox = function () {
+    utils.openControlBox = async function (_converse) {
+        const model = await _converse.api.chats.open('controlbox');
+        await utils.waitUntil(() => model.get('connected'));
         var toggle = document.querySelector(".toggle-controlbox");
         if (!u.isVisible(document.querySelector("#controlbox"))) {
             if (!u.isVisible(toggle)) {
@@ -100,7 +102,7 @@
 
     utils.openChatRoomViaModal = async function (_converse, jid, nick='') {
         // Opens a new chatroom
-        utils.openControlBox(_converse);
+        await utils.openControlBox(_converse);
         const view = await _converse.chatboxviews.get('controlbox');
         const roomspanel = view.roomspanel;
         roomspanel.el.querySelector('.show-add-muc-modal').click();
